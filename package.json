@@ -15,11 +15,14 @@
     "url": "git@github.com-personal:jorgemendanhacruz/multi-api-gateway.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jorge Mendanha Cruz",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "reflect-metadata": "^0.2.2",
+    "shallow-equal-object": "^1.1.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
