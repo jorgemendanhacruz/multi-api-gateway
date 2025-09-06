@@ -1,0 +1,59 @@
+import { Service, Inject } from "typedi";
+import { Repository, RedisConnection } from 'redis-om';
+import { Weather } from '../domain/weather';
+import IWeatherRepo from './IRepos/IWeatherRepo';
+import weatherSchema from '../persistence/schemas/weatherSchema';
+import { WeatherMap } from '../mappers/weatherMap';
+
+@Service()
+export default class WeatherRepo implements IWeatherRepo {
+
+  private readonly repo: Repository;
+
+  constructor(@Inject("redis.client") private client: RedisConnection) {
+    this.repo = new Repository(weatherSchema, client);
+  }
+
+  async getAll(): Promise<Weather[]> {
+    const weathers = await this.repo.search().returnAll();
+    const domainWeathers = await Promise.all(
+      weathers.map(async (rawWeather) =>
+        WeatherMap.toDomain(rawWeather)
+      )
+    );
+    return domainWeathers.filter((weather) => weather !== null);
+  }
+
+  async create(weather: Weather): Promise<Weather> {
+    const persisntenceWeather = WeatherMap.toPersistence(weather);
+    const createdWeather = await this.repo.save(persisntenceWeather);
+    return WeatherMap.toDomain(createdWeather);
+  }
+
+  async getByCity(city: string): Promise<Weather | null> {
+    city = city.toUpperCase();
+    
+    const found = await this.repo.search()
+      .where('city')
+      .equals(city)
+      .returnFirst();
+    return found ? WeatherMap.toDomain(found) : null;
+  }
+
+  async update(city: string, weather: Partial<Weather>): Promise<Weather> {
+    city = city.toUpperCase();
+    
+    const found = await this.repo.search()
+      .where('city')
+      .equals(city)
+      .returnFirst();
+
+    if (!found) {
+      throw new Error(`Weather for city ${city} not found.`);
+    }
+
+    const updatedPersistence = { ...found, ...WeatherMap.toPersistence(weather as Weather) };
+    const saved = await this.repo.save(updatedPersistence);
+    return WeatherMap.toDomain(saved);
+  }
+}

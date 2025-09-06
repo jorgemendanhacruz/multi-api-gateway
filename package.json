@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/app.ts",
     "lint": "eslint 'src/**/*.ts'"
   },
   "repository": {
@@ -18,10 +18,18 @@
   "author": "Jorge Mendanha Cruz",
   "license": "ISC",
   "dependencies": {
+    "celebrate": "^15.0.3",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "method-override": "^3.0.0",
+    "redis": "^5.8.2",
+    "redis-om": "^0.4.7",
     "reflect-metadata": "^0.2.2",
     "shallow-equal-object": "^1.1.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "typedi": "^0.10.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {

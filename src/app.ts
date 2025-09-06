@@ -1,14 +1,32 @@
+import 'reflect-metadata'; //Needed to use typedi decorators
 import express from 'express';
-import { errorHandler } from './middlewares/errorHandler';
+import Logger from './loaders/logger';
+import config from './config/config'
 
-const app = express();
 
-app.use(express.json());
+async function startServer() {
 
-// Routes
-//app.use('/api/items', itemRoutes);
+  const app = express();
 
-// Global error handler (should be after routes)
-app.use(errorHandler);
+  await require('./loaders').default({ expressApp: app });
 
-export default app;
+  app.listen(config.port, () => {
+
+    console.log("Server listening on port: " + config.port);
+
+    Logger.info(`
+      ################################################
+      🛡️  Server listening on port: ${config.port} 🛡️
+      ################################################
+
+    `);
+
+  })
+    .on('error', (err) => {
+      Logger.error(err);
+      process.exit(1);
+    });
+
+}
+
+startServer();
