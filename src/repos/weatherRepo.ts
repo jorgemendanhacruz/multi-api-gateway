@@ -12,6 +12,11 @@ export default class WeatherRepo implements IWeatherRepo {
 
   constructor(@Inject("redis.client") private client: RedisConnection) {
     this.repo = new Repository(weatherSchema, client);
+    this.repo.createIndex().catch(err => {
+      if (!err.message.includes('Index already exists')) {
+        console.error(err);
+      }
+    });
   }
 
   async getAll(): Promise<Weather[]> {
@@ -32,7 +37,7 @@ export default class WeatherRepo implements IWeatherRepo {
 
   async getByCity(city: string): Promise<Weather | null> {
     city = city.toUpperCase();
-    
+
     const found = await this.repo.search()
       .where('city')
       .equals(city)
@@ -42,7 +47,7 @@ export default class WeatherRepo implements IWeatherRepo {
 
   async update(city: string, weather: Partial<Weather>): Promise<Weather> {
     city = city.toUpperCase();
-    
+
     const found = await this.repo.search()
       .where('city')
       .equals(city)

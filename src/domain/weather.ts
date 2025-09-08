@@ -20,43 +20,43 @@ interface WeatherProps {
 export class Weather extends ValueObject<WeatherProps> {
 
     get city(): string{
-        return this.city;
+        return this.props.city;
     }
 
     get country(): string{
-        return this.country;
+        return this.props.country;
     }
 
     get lat(): number{
-        return this.lat;
+        return this.props.lat;
     }
 
     get lon(): number{
-        return this.lon;
+        return this.props.lon;
     }
 
     get sunrise(): number{
-        return this.sunrise;
+        return this.props.sunrise;
     }
 
     get sunset(): number{
-        return this.sunset;
+        return this.props.sunset;
     }
 
     get temperature(): number{
-        return this.temperature;
+        return this.props.temperature;
     }
 
     get feelsLikeTemperature(): number{
-        return this.feelsLikeTemperature;
+        return this.props.feelsLikeTemperature;
     }
 
     get description(): string{
-        return this.description;
+        return this.props.description;
     }
 
     get timestamp(): number{
-        return this.timestamp;
+        return this.props.timestamp;
     }
 
     

@@ -22,6 +22,7 @@ export default class WeatherController implements IWeatherController {
                 return res.status(400).json(result.error);
             }
 
+
             return res.status(200).json(result.getValue());
         }
         catch (error) {
@@ -62,7 +63,7 @@ export default class WeatherController implements IWeatherController {
 
     public async updateWeather(req: Request, res: Response, next: NextFunction) {
         try {
-            
+
         }
         catch (error) {
             return next(error);

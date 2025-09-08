@@ -2,10 +2,10 @@ import expressLoader from './express';
 import dependencyInjectorLoader from './dependencyInjector';
 import Logger from './logger';
 import config from '../config/config';
+import loadRedis from './redis';
 
 export default async ({ expressApp }) => {
-  //const mongoConnection = await mongooseLoader();
-  const redisConnection = null; //call here the connection
+  const redisConnection = await loadRedis();
   Logger.info('✌️ DB loaded and connected!');
 
   // Schemas

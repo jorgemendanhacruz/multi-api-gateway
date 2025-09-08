@@ -15,6 +15,7 @@ export class WeatherMap extends Mapper<Weather> {
   }
 
   public static toDTO(weather: Weather): IWeatherDTO {
+
     return {
       city: weather.city,
       country: weather.country,
@@ -29,7 +30,7 @@ export class WeatherMap extends Mapper<Weather> {
     } as IWeatherDTO;
   }
 
-   public static toPersistence(weather: Weather): IWeatherPersistence {
+  public static toPersistence(weather: Weather): IWeatherPersistence {
     return {
       city: weather.city,
       country: weather.country,

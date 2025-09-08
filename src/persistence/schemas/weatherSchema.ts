@@ -14,7 +14,7 @@ const weatherSchema = new Schema<IWeatherPersistence>('weather',
     description: { type: 'string' },
     timestamp: { type: 'string' },
   },
-  { dataStructure: 'JSON' ,
+  { dataStructure: 'HASH' ,
   },
 );
 

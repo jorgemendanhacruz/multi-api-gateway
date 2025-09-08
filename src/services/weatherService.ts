@@ -14,8 +14,13 @@ export default class WeatherService implements IWeatherService {
   ) { }
 
   public async getAllWeathers(): Promise<Result<IWeatherDTO[]>> {
-    const weathers = await this.weatherRepo.getAll();
-    return Result.ok(weathers.map(WeatherMap.toDTO));
+    try {
+      const weathers = await this.weatherRepo.getAll();
+      return Result.ok(weathers.map(WeatherMap.toDTO));    
+    } catch (error) {
+      return Result.fail("Failed to fetch weathers");
+    }
+
   }
 
   public async getWeather(city: string): Promise<Result<IWeatherDTO>> {

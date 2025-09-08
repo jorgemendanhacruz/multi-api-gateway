@@ -1,22 +1,17 @@
-  import { createClient } from 'redis';
+import { createClient } from 'redis';
+import config from '../config/config'
 
 const client = createClient({
-  username: 'default',
-  password: '*******',
+  username: config.redis.username,
+  password: config.redis.password,
   socket: {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
+    host: config.redis.host,
+    port: config.redis.port
   }
 });
 
-client.on('error', err => console.log('Redis Client Error', err));
-
-async function connect() {
+export default async function loadRedis() {
+  client.on('error', err => console.log('Redis Client Error', err));
   await client.connect();
-
-  await client.set('foo', 'bar');
-  const result = await client.get('foo');
-  console.log(result); // >>> bar
+  return client;
 }
-
-connect();

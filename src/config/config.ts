@@ -16,6 +16,12 @@ export interface Config {
   nodeEnv: string;
   logs: Logs;
   api: {prefix: string};
+  redis: {
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+  };
   controllers: Record<string, Pair>;
   services: Record<string, Pair>;
   repos: Record<string, Pair>;
@@ -33,6 +39,13 @@ const config: Config = {
 
   api: {
     prefix: '/api',
+  },
+
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+    username: process.env.REDIS_USERNAME,
+    password: process.env.REDIS_PASSWORD,
   },
 
   controllers: {
