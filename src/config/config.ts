@@ -22,6 +22,7 @@ export interface Config {
     username: string;
     password: string;
   };
+  weatherApiUrl: string;
   controllers: Record<string, Pair>;
   services: Record<string, Pair>;
   repos: Record<string, Pair>;
@@ -47,6 +48,8 @@ const config: Config = {
     username: process.env.REDIS_USERNAME,
     password: process.env.REDIS_PASSWORD,
   },
+
+  weatherApiUrl: 'https://api.openweathermap.org/data/2.5/weather?',
 
   controllers: {
     weather: {
