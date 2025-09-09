@@ -8,12 +8,18 @@ export default async ({ expressApp }) => {
   const redisConnection = await loadRedis();
   Logger.info('✌️ DB loaded and connected!');
 
+  //externalAPIs
+  const weatherApiClient = {
+    name: config.weatherApi.name,
+    path: config.weatherApi.path,
+  };
+
   // Schemas
   const weahterSchema = {
     name: 'weatherSchema',
     schema: '../persistence/schemas/weatherSchema',
   };
-  
+
   // Controllers
   const weatherController = {
     name: config.controllers.weather.name,
@@ -35,18 +41,11 @@ export default async ({ expressApp }) => {
   // Dependency Injector
   dependencyInjectorLoader({
     redisConnection,
-    schemas: [
-      weahterSchema
-    ],
-    controllers: [
-      weatherController,
-    ],
-    repos: [
-      weatherRepo,
-    ],
-    services: [
-      weatherService,
-    ],
+    externalAPIs: [weatherApiClient],
+    schemas: [weahterSchema],
+    controllers: [weatherController],
+    repos: [weatherRepo],
+    services: [weatherService],
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
 

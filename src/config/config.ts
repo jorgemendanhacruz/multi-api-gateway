@@ -15,19 +15,22 @@ export interface Config {
   port: number;
   nodeEnv: string;
   logs: Logs;
-  api: {prefix: string};
+  api: { prefix: string };
   redis: {
     host: string;
     port: number;
     username: string;
     password: string;
   };
-  weatherApiUrl: string;
+  weatherApi: {
+    url: string;
+    name: string;
+    path: string;
+  };
   controllers: Record<string, Pair>;
   services: Record<string, Pair>;
   repos: Record<string, Pair>;
 }
-
 
 const config: Config = {
   port: Number(process.env.PORT) || 3000,
@@ -49,28 +52,32 @@ const config: Config = {
     password: process.env.REDIS_PASSWORD,
   },
 
-  weatherApiUrl: 'https://api.openweathermap.org/data/2.5/weather?',
+  weatherApi: {
+    url: 'https://api.openweathermap.org/data/2.5/weather?',
+    name: 'WeatherApiClient',
+    path: '../externalAPIs/weatherApiClient',
+  },
 
   controllers: {
     weather: {
-      name: "WeatherController",
-      path: "../controllers/weatherController",
+      name: 'WeatherController',
+      path: '../controllers/weatherController',
     },
   },
 
   services: {
     weather: {
-      name: "WeatherService",
-      path: "../services/weatherService",
+      name: 'WeatherService',
+      path: '../services/weatherService',
     },
   },
 
   repos: {
     weather: {
-      name: "WeatherRepo",
-      path: "../repos/weatherRepo",
+      name: 'WeatherRepo',
+      path: '../repos/weatherRepo',
     },
-  }
+  },
 };
 
 export default config;

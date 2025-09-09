@@ -1,8 +1,9 @@
 import { Container } from 'typedi';
 import LoggerInstance from './logger';
 
-export default ({ redisConnection, schemas, controllers, repos, services}: {
+export default ({ redisConnection, externalAPIs, schemas, controllers, repos, services}: {
                     redisConnection;
+                    externalAPIs: {name: string; path: string}[];
                     schemas: { name: string; schema: any }[],
                     controllers: {name: string; path: string }[],
                     repos: {name: string; path: string }[],
@@ -12,11 +13,13 @@ export default ({ redisConnection, schemas, controllers, repos, services}: {
 
     Container.set('logger', LoggerInstance);
 
-    /**
-     * We are injecting the mongoose models into the DI container.
-     * This is controversial but it will provide a lot of flexibility
-     * at the time of writing unit tests.
-     */
+
+    externalAPIs.forEach(m => {
+      let apiClass = require(m.path).default;
+      let apiInstance = Container.get(apiClass);
+      Container.set(m.name, apiInstance);
+    });
+
     schemas.forEach(m => {
       // Notice the require syntax and the '.default'
       let schema = require(m.schema).default;

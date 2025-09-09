@@ -6,8 +6,8 @@ import IWeatherRepo from '../repos/IRepos/IWeatherRepo';
 import { WeatherMap } from '../mappers/weatherMap';
 import nodeGeocoder from 'node-geocoder';
 import config from '../config/config';
-import { Logger } from 'winston';
-import WeatherApiClient from '../externalAPIs/weatherApiClient';
+import Logger from '../loaders/logger';
+import IWeatherApiClient from '../externalAPIs/IExternalAPIs/IWeatherApiClient';
 
 @Service()
 export default class WeatherService implements IWeatherService {
@@ -16,6 +16,7 @@ export default class WeatherService implements IWeatherService {
 
   constructor(
     @Inject(config.repos.weather.name) private weatherRepo: IWeatherRepo,
+    @Inject(config.weatherApi.name) private weatherApiClient: IWeatherApiClient,
   ) {
     this.geocoder = nodeGeocoder({
       provider: 'openstreetmap',
@@ -33,38 +34,35 @@ export default class WeatherService implements IWeatherService {
 
   public async getWeather(city: string): Promise<Result<IWeatherDTO>> {
     //Search for the city on REDIS
-    const weather = await this.weatherRepo.getByCity(city);
+    const res = await this.geocoder.geocode(city);
+    const lat = parseFloat(res[0].latitude.toFixed(4)).toString();
+    const lon = parseFloat(res[0].longitude.toFixed(4)).toString();
+
+    const weather = await this.weatherRepo.getByCoords(lat, lon);
 
     if (!weather) {
-      const res = await this.geocoder.geocode(city);
-      const lat = res[0].latitude;
-      const lon = res[0].longitude;
-      const country = res[0].country;
+      const weatherData = await this.weatherApiClient.getWeather(lat.toString(), lon.toString());
+      const dto = await WeatherMap.fromResponseToDto(weatherData);
+      const weather = await WeatherMap.toDomain(dto);
 
-      //call open weather API
-      const weatherApiClient = new WeatherApiClient();
-      const weatherData = await weatherApiClient.getWeather(lat.toString(), lon.toString());
+      const createdWeather = await this.weatherRepo.create(weather);
+      Logger.info(createdWeather.city + " - " + createdWeather.country + " added to cache ");
 
-
-
-      // store weather
-
-
-      // get weather
-
+      return Result.ok(WeatherMap.toDTO(createdWeather));
     }
 
-    //Exists?? -> Return the weather for the given city.
     return Result.ok(WeatherMap.toDTO(weather));
   }
 
-  async createWeather(weatherDto: IWeatherDTO): Promise<Result<IWeatherDTO>> {
+
+
+  public async createWeather(weatherDto: IWeatherDTO): Promise<Result<IWeatherDTO>> {
     const weather = await WeatherMap.toDomain(weatherDto);
     const createdWeather = await this.weatherRepo.create(weather);
     return Result.ok(WeatherMap.toDTO(createdWeather));
   }
 
-  async updateWeather(
+  public async updateWeather(
     city: string,
     weatherDto: Partial<IWeatherDTO>,
   ): Promise<Result<IWeatherDTO>> {

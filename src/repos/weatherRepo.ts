@@ -35,12 +35,11 @@ export default class WeatherRepo implements IWeatherRepo {
     return WeatherMap.toDomain(createdWeather);
   }
 
-  async getByCity(city: string): Promise<Weather | null> {
-    city = city.toUpperCase();
+  async getByCoords(lat: string, lon: string): Promise<Weather | null> {
 
     const found = await this.repo.search()
-      .where('city')
-      .equals(city)
+      .where('lat').equals(lat)
+      .and('lon').equals(lon)
       .returnFirst();
     return found ? WeatherMap.toDomain(found) : null;
   }

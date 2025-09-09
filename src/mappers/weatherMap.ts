@@ -14,6 +14,21 @@ export class WeatherMap extends Mapper<Weather> {
     return weatherOrError.isSuccess ? weatherOrError.getValue() : null;
   }
 
+  public static async fromResponseToDto(response: any): Promise<IWeatherDTO> {
+    return {
+      city: response.name,
+      country: response.sys.country,
+      lat: response.coord.lat,
+      lon: response.coord.lon,
+      sunrise: response.sys.sunrise,
+      sunset: response.sys.sunset,
+      temperature: response.main.temp,
+      feelsLikeTemperature: response.main.feels_like,
+      description: response.weather[0].description,
+      timestamp: Date.now(),
+    };
+  }
+
   public static toDTO(weather: Weather): IWeatherDTO {
 
     return {

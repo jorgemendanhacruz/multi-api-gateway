@@ -12,8 +12,6 @@ async function startServer() {
 
   app.listen(config.port, () => {
 
-    console.log("Server listening on port: " + config.port);
-
     Logger.info(`
       ################################################
       🛡️  Server listening on port: ${config.port} 🛡️
