@@ -9,6 +9,7 @@ import IWeatherDTO from "../dto/IWeatherDTO";
 
 @Service()
 export default class WeatherController implements IWeatherController {
+    
     constructor(
         @Inject(config.services.weather.name) private weatherService: IWeatherService
     ) { }

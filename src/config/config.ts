@@ -27,6 +27,11 @@ export interface Config {
     name: string;
     path: string;
   };
+  newsApi: {
+    url: string;
+    name: string;
+    path: string;
+  };
   controllers: Record<string, Pair>;
   services: Record<string, Pair>;
   repos: Record<string, Pair>;
@@ -58,10 +63,20 @@ const config: Config = {
     path: '../externalAPIs/weatherApiClient',
   },
 
+  newsApi: {
+    url: 'https://newsapi.org/v2/top-headlines?',
+    name: 'NewsApiClient',
+    path: '../externalAPIs/newsApiClient',
+  },
+
   controllers: {
     weather: {
       name: 'WeatherController',
       path: '../controllers/weatherController',
+    },
+    news: {
+      name: 'NewsController',
+      path: '../controllers/newsController',
     },
   },
 
@@ -70,12 +85,20 @@ const config: Config = {
       name: 'WeatherService',
       path: '../services/weatherService',
     },
+    news: {
+      name: 'NewsService',
+      path: '../services/newsService',
+    },
   },
 
   repos: {
     weather: {
       name: 'WeatherRepo',
       path: '../repos/weatherRepo',
+    },
+    news: {
+      name: 'NewsRepo',
+      path: '../repos/newsRepo',
     },
   },
 };

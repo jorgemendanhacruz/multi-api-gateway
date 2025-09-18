@@ -13,7 +13,6 @@ export default ({ redisConnection, externalAPIs, schemas, controllers, repos, se
 
     Container.set('logger', LoggerInstance);
 
-
     externalAPIs.forEach(m => {
       let apiClass = require(m.path).default;
       let apiInstance = Container.get(apiClass);
@@ -21,7 +20,6 @@ export default ({ redisConnection, externalAPIs, schemas, controllers, repos, se
     });
 
     schemas.forEach(m => {
-      // Notice the require syntax and the '.default'
       let schema = require(m.schema).default;
       Container.set(m.name, schema);
     });

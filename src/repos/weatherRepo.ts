@@ -31,7 +31,9 @@ export default class WeatherRepo implements IWeatherRepo {
 
   async create(weather: Weather): Promise<Weather> {
     const persisntenceWeather = WeatherMap.toPersistence(weather);
-    const createdWeather = await this.repo.save(persisntenceWeather);
+    const id = weather.city.toUpperCase();
+    const createdWeather = await this.repo.save(id, persisntenceWeather);
+    await this.repo.expire(id, 600);
     return WeatherMap.toDomain(createdWeather);
   }
 
