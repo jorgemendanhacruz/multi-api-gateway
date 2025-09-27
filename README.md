@@ -10,10 +10,16 @@ Responses are cached in **Redis** to improve speed and reduce API call limits.
 - Unified API gateway (`/api/...`) for clients
 - Built-in caching with **Redis**
 - Lightweight **Express.js** server
-- Ready for containerization (Docker support planned)
 
 ## 🏗 Architecture
 ![Architecture Diagram](./docs/LogicalView_L2.png)
+
+## 💡 Usage
+The service automatically merges and normalizes data from multiple APIs.
+
+Cached responses are stored for a configurable time (default: 10 minutes) to minimize external API requests.
+
+Easy to extend: add new API integrations in the services/ directory and update the gateway routes.
 
 ## 📦 Tech Stack
 - [Node.js](https://nodejs.org/)
